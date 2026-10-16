@@ -461,6 +461,7 @@ function addBubble(role, text, sources = [], changed = false, updated = "") {
 
   chatMessages.appendChild(bubble);
   bubble.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  return bubble;
 }
 
 async function sendMessage(event) {
