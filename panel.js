@@ -58,13 +58,24 @@ function safeLink(value) {
 }
 
 async function getActiveTab() {
-  const [tab] = await chrome.tabs.query({
+  const tabs = await chrome.tabs.query({
     active: true,
-    currentWindow: true
+    lastFocusedWindow: true
   });
 
+  console.log("IRIS: Tabs returned:", tabs);
+
+  const tab = tabs[0];
+
+  console.log("IRIS: Selected tab:", tab);
+  console.log("IRIS: URL:", tab?.url);
+  console.log("IRIS: Tab ID:", tab?.id);
+
   if (!tab?.id || !tab.url || !/^https?:\/\//i.test(tab.url)) {
-    throw new Error("Open a normal webpage before using IRIS.");
+    throw new Error(
+      "Open a normal webpage before using IRIS. URL: " +
+      (tab?.url || "unavailable")
+    );
   }
 
   tabId = tab.id;
