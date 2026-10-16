@@ -256,6 +256,7 @@ auditBtn.addEventListener("click", async () => {
 
     setStatus("Analyzing article and searching for evidence...");
 
+    
     const response = await fetch(API_URL, {
       method: "POST",
       headers: {
@@ -264,7 +265,19 @@ auditBtn.addEventListener("click", async () => {
       body: JSON.stringify({ text })
     });
 
-    const data = await response.json();
+    const responseText = await response.text();
+
+    let data;
+
+    try {
+      data = JSON.parse(responseText);
+    } catch {
+      throw new Error(
+        `Server returned non-JSON data (HTTP ${response.status}): ` +
+        responseText.substring(0, 250)
+      );
+    }
+
 
     if (!response.ok) {
       throw new Error(data.error || `Server error (${response.status}).`);
