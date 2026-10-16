@@ -1,0 +1,237 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IRIS</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b1020;
+      --surface: #121a2b;
+      --surface2: #19243a;
+      --border: #28364d;
+      --text: #e8eef9;
+      --muted: #9baac1;
+      --blue: #72a7ff;
+      --blue-bg: #19365f;
+      --red: #ff8d94;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 280px;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font: 14px/1.55 "Segoe UI", system-ui, sans-serif;
+    }
+
+    button, textarea { font: inherit; }
+
+    button {
+      cursor: pointer;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 10px 12px;
+      color: var(--text);
+      background: var(--surface2);
+    }
+
+    button:hover:not(:disabled) { border-color: var(--blue); }
+    button:disabled { opacity: .55; cursor: wait; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      background: rgba(11, 16, 32, .96);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand { flex: 1; min-width: 0; }
+    .brand h1 { margin: 0; font-size: 18px; letter-spacing: 1px; }
+    .brand p { margin: 1px 0 0; color: var(--muted); font-size: 11px; }
+    .back { display: none; padding: 7px 10px; }
+    .view { padding: 16px; }
+    .hidden { display: none !important; }
+
+    h2 { font-size: 17px; margin: 0 0 8px; }
+    h3 { font-size: 13px; margin: 0; }
+    p { overflow-wrap: anywhere; }
+
+    .muted { color: var(--muted); }
+    .intro { color: var(--muted); margin: 0 0 14px; }
+
+    .primary {
+      width: 100%;
+      background: var(--blue-bg);
+      border-color: #355b91;
+      color: white;
+      font-weight: 650;
+    }
+
+    .secondary { width: 100%; margin-top: 8px; }
+
+    .status {
+      margin: 12px 0;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .finding {
+      padding: 13px;
+      margin: 10px 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+    }
+
+    .finding-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .finding-title { flex: 1; font-weight: 700; }
+    .chat-icon { padding: 5px 9px; flex-shrink: 0; }
+    .quote {
+      margin: 10px 0;
+      padding-left: 10px;
+      border-left: 2px solid var(--blue);
+      color: #bdcce2;
+      font-size: 12px;
+    }
+
+    .explanation { margin: 8px 0; }
+    .fact-check {
+      padding: 9px;
+      margin-top: 8px;
+      background: var(--surface2);
+      border-radius: 7px;
+      font-size: 12px;
+    }
+
+    a { color: var(--blue); overflow-wrap: anywhere; }
+
+    #chatMessages {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-bottom: 12px;
+    }
+
+    .bubble {
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .bubble.user { background: var(--blue-bg); align-self: flex-end; max-width: 92%; }
+    .bubble.assistant { background: var(--surface); align-self: stretch; }
+    .bubble-label { font-size: 11px; color: var(--muted); margin-bottom: 5px; }
+
+    .source-list { margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border); }
+    .source { margin-top: 8px; font-size: 12px; }
+    .source p { margin: 3px 0; color: var(--muted); }
+
+    .change-note {
+      margin-top: 10px;
+      padding: 9px;
+      border-left: 3px solid #8bc7a0;
+      background: #142a28;
+      border-radius: 5px;
+      font-size: 12px;
+    }
+
+    .composer {
+      position: sticky;
+      bottom: 0;
+      padding: 12px 0 0;
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+    }
+
+    textarea {
+      display: block;
+      width: 100%;
+      min-height: 76px;
+      max-height: 180px;
+      resize: vertical;
+      padding: 11px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: var(--surface);
+      color: var(--text);
+      outline: none;
+    }
+
+    textarea:focus { border-color: var(--blue); }
+    .send-row { display: flex; gap: 8px; margin-top: 8px; }
+    .send-row button:first-child { flex: 1; background: var(--blue-bg); }
+    .small { font-size: 11px; color: var(--muted); margin: 8px 0 0; }
+
+    #reportView, #chatView { padding-bottom: 20px; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <button id="backBtn" class="back" type="button">← Back</button>
+    <div class="brand">
+      <h1>IRIS</h1>
+      <p>Information &amp; Reasoning Inconsistency Scanner</p>
+    </div>
+  </header>
+
+  <main id="reportView" class="view">
+    <h2>Page analysis</h2>
+    <p class="intro">Question claims. Examine reasoning. Follow the evidence.</p>
+
+    <button id="scanBtn" class="primary" type="button">Run AI Scanner</button>
+    <button id="talkPageBtn" class="secondary" type="button">Talk with IRIS about this page</button>
+    <button id="restoreBtn" class="secondary" type="button">Restore saved analysis</button>
+    <button id="clearBtn" class="secondary" type="button">Hide highlights</button>
+
+    <div id="status" class="status" role="status" aria-live="polite">
+      Getting the current webpage...
+    </div>
+
+    <h2>Findings</h2>
+    <div id="results"></div>
+
+    <p class="small">IRIS uses AI-assisted analysis. Findings may be wrong or incomplete. Check important claims against reliable evidence.</p>
+  </main>
+
+  <main id="chatView" class="view hidden">
+    <h2 id="chatTitle">Talk with IRIS</h2>
+    <p id="chatSubtitle" class="intro">Ask questions, challenge an assessment, or request fresh verification.</p>
+
+    <div id="chatContext" class="status"></div>
+    <div id="chatMessages" aria-live="polite"></div>
+
+    <form id="chatForm" class="composer">
+      <textarea id="chatInput" maxlength="3000" placeholder="Ask IRIS a question..." required></textarea>
+      <div class="send-row">
+        <button id="sendBtn" type="submit">Send message</button>
+        <button id="newChatBtn" type="button">New chat</button>
+      </div>
+      <p class="small">When verification is useful, IRIS will search for fresh evidence. Search results may still be incomplete.</p>
+    </form>
+  </main>
+
+  <script src="panel.js"></script>
+</body>
+</html>
