@@ -638,6 +638,88 @@ clearBtn.addEventListener("click", async () => {
   }
 });
 
+const clearFindingsBtn = document.getElementById("clearFindingsBtn");
+
+// Remove highlights from the webpage without deleting the saved analysis.
+async function hidePageHighlights() {
+  if (!tabId) return;
+
+  await chrome.tabs.sendMessage(tabId, {
+    action: "clearHighlights"
+  });
+
+  setStatus("Highlights hidden. Your analysis is still saved.");
+}
+
+// Restore highlights from the cached analysis without scanning again.
+async function restorePageHighlights() {
+  if (!tabId || !cacheKey) return;
+
+  const saved = await chrome.storage.local.get(cacheKey);
+  const cached = saved[cacheKey];
+
+  if (!cached || !Array.isArray(cached.results)) {
+    setStatus("No saved analysis for this page. Analyse it first.");
+    return;
+  }
+
+  results = cached.results;
+
+  await chrome.tabs.sendMessage(tabId, {
+    action: "highlight",
+    results
+  });
+
+  renderResults(results);
+  setStatus("Saved highlights restored.");
+}
+
+// Clear the current report and its highlights.
+// This does not delete analyses belonging to other pages.
+async function clearCurrentFindings() {
+  if (!tabId) return;
+
+  await chrome.tabs.sendMessage(tabId, {
+    action: "clearHighlights"
+  });
+
+  results = [];
+  document.getElementById("results").replaceChildren();
+
+  if (cacheKey) {
+    await chrome.storage.local.remove(cacheKey);
+  }
+
+  setStatus("Findings cleared. You can analyse this page again.");
+}
+
+document.getElementById("clearBtn").addEventListener("click", async () => {
+  try {
+    await hidePageHighlights();
+  } catch (error) {
+    setStatus("Could not hide highlights. Reload the webpage and try again.");
+    console.error(error);
+  }
+});
+
+document.getElementById("restoreBtn").addEventListener("click", async () => {
+  try {
+    await restorePageHighlights();
+  } catch (error) {
+    setStatus("Could not restore highlights. Reload the webpage and try again.");
+    console.error(error);
+  }
+});
+
+clearFindingsBtn.addEventListener("click", async () => {
+  try {
+    await clearCurrentFindings();
+  } catch (error) {
+    setStatus("Could not clear findings. Please try again.");
+    console.error(error);
+  }
+});
+
 newChatBtn.addEventListener("click", () => {
   openChat(chatMode, selectedFinding);
 });

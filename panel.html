@@ -78,7 +78,40 @@
       font-weight: 650;
     }
 
-    .secondary { width: 100%; margin-top: 8px; }
+    .secondary {
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    /* Subtle utility actions */
+    .utility-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin: 12px 0 16px;
+    }
+
+    .utility-actions button {
+    width: auto;
+    padding: 4px 6px;
+    border: none;
+    border-radius: 5px;
+    background: transparent;
+    color: var(--muted);
+    font-size: 12px;
+    }
+
+    .utility-actions button:hover:not(:disabled) {
+    color: var(--blue);
+    border-color: transparent;
+    background: rgba(114, 167, 255, 0.06);
+    }
+
+    .utility-divider {
+    color: var(--border);
+    user-select: none;
+    }
 
     .status {
       margin: 12px 0;
@@ -138,6 +171,32 @@
       border-radius: 12px;
       white-space: pre-wrap;
       overflow-wrap: anywhere;
+    }
+
+    .findings-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 18px;
+    }
+
+    .findings-heading h2 {
+    margin: 0;
+    }
+
+    #clearFindingsBtn {
+    padding: 4px 6px;
+    border: none;
+    border-radius: 5px;
+    background: transparent;
+    color: var(--muted);
+    font-size: 12px;
+    }
+
+    #clearFindingsBtn:hover {
+    color: var(--blue);
+    background: rgba(114, 167, 255, 0.06);
     }
 
     .bubble.user { background: var(--blue-bg); align-self: flex-end; max-width: 92%; }
@@ -200,19 +259,26 @@
     <h2>Page analysis</h2>
     <p class="intro">Question claims. Examine reasoning. Follow the evidence.</p>
 
-    <button id="scanBtn" class="primary" type="button">Run AI Scanner</button>
-    <button id="talkPageBtn" class="secondary" type="button">Talk with IRIS about this page</button>
-    <button id="restoreBtn" class="secondary" type="button">Restore saved analysis</button>
-    <button id="clearBtn" class="secondary" type="button">Hide highlights</button>
+    <button id="scanBtn" class="primary" type="button">Analyze page</button>
+    <button id="talkPageBtn" class="secondary" type="button">Talk with IRIS</button>
+    <div class="utility-actions">
+      <button id="restoreBtn" type="button">↺ Restore highlights</button>
+      <span class="utility-divider" aria-hidden="true">·</span>
+      <button id="clearBtn" type="button">Hide highlights</button>
+    </div>
 
     <div id="status" class="status" role="status" aria-live="polite">
       Getting the current webpage...
     </div>
 
-    <h2>Findings</h2>
+    <div class="findings-heading">
+      <h2>Analysis</h2>
+      <button id="clearFindingsBtn" type="button">Clear</button>
+    </div>
+
     <div id="results"></div>
 
-    <p class="small">IRIS uses AI-assisted analysis. Findings may be wrong or incomplete. Check important claims against reliable evidence.</p>
+    <p class="small">IRIS uses AI to examine claims and reasoning. Always check important claims against reliable sources.</p>
   </main>
 
   <main id="chatView" class="view hidden">
@@ -223,12 +289,12 @@
     <div id="chatMessages" aria-live="polite"></div>
 
     <form id="chatForm" class="composer">
-      <textarea id="chatInput" maxlength="3000" placeholder="Ask IRIS a question..." required></textarea>
+      <textarea id="chatInput" maxlength="3000" placeholder="Ask about this page..." required></textarea>
       <div class="send-row">
-        <button id="sendBtn" type="submit">Send message</button>
+        <button id="sendBtn" type="submit">Send</button>
         <button id="newChatBtn" type="button">New chat</button>
       </div>
-      <p class="small">When verification is useful, IRIS will search for fresh evidence. Search results may still be incomplete.</p>
+      <p class="small">IRIS can look for additional evidence when needed. Always check important claims against reliable sources.</p>
     </form>
   </main>
 
