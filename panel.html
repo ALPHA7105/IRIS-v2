@@ -68,7 +68,7 @@
     p { overflow-wrap: anywhere; }
 
     .muted { color: var(--muted); }
-    .intro { color: var(--muted); margin: 0 0 14px; }
+    .intro { color: var(--muted); margin: 0 0 14px; text-align: center; font-size: 12px; line-height: 1.5; }
 
     .primary {
       width: 100%;
@@ -241,7 +241,7 @@
     textarea:focus { border-color: var(--blue); }
     .send-row { display: flex; gap: 8px; margin-top: 8px; }
     .send-row button:first-child { flex: 1; background: var(--blue-bg); }
-    .small { font-size: 11px; color: var(--muted); margin: 8px 0 0; }
+    .small { font-size: 11px; color: var(--muted); margin: 8px 0 0; text-align: center; }
 
     #reportView, #chatView { padding-bottom: 20px; }
   </style>
@@ -256,7 +256,7 @@
   </header>
 
   <main id="reportView" class="view">
-    <h2>Page analysis</h2>
+    <h2>Analyse the page</h2>
     <p class="intro">Question claims. Examine reasoning. Follow the evidence.</p>
 
     <button id="scanBtn" class="primary" type="button">Analyze page</button>
@@ -278,7 +278,7 @@
 
     <div id="results"></div>
 
-    <p class="small">IRIS uses AI to examine claims and reasoning. Always check important claims against reliable sources.</p>
+    <p class="small">Look beyond the headline.</p>
   </main>
 
   <main id="chatView" class="view hidden">
