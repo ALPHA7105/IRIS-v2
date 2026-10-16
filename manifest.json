@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "IRIS - Information & Reasoning Inconsistency Scanner",
+  "short_name": "IRIS",
+  "description": "An AI-powered tool designed to detect misinformation and logical inconsistencies in digital media through real-time verification.",
+  "version": "1.0.0",
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://irisextension.vercel.app/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}

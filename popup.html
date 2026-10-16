@@ -1,0 +1,330 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IRIS</title>
+
+  <style>
+    :root {
+      --iris-blue: #1a73e8;
+      --iris-blue-dark: #1557b0;
+      --error-red: #d93025;
+      --bg-gray: #f8f9fa;
+      --border-gray: #dadce0;
+      --text-gray: #5f6368;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 360px;
+      min-height: 200px;
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--bg-gray);
+      color: #202124;
+    }
+
+    /* Header */
+
+    .header {
+      background: var(--iris-blue);
+      color: white;
+      padding: 18px 16px 15px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
+    }
+
+    .header-title-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.35;
+      font-weight: 650;
+      letter-spacing: 0.1px;
+    }
+
+    .status {
+      margin-top: 7px;
+      font-size: 10px;
+      line-height: 1.5;
+      opacity: 0.9;
+      text-transform: uppercase;
+      letter-spacing: 0.55px;
+    }
+
+    /* Main content */
+
+    #mainPage {
+      display: block;
+    }
+
+    .container {
+      padding: 16px;
+    }
+
+    .intro {
+      margin: 0 0 14px;
+      color: var(--text-gray);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    /* Buttons */
+
+    button {
+      width: 100%;
+      padding: 11px 12px;
+      margin: 0 0 9px;
+      border: 1px solid var(--border-gray);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s ease, opacity 0.15s ease;
+    }
+
+    button:focus-visible {
+      outline: 2px solid var(--iris-blue);
+      outline-offset: 2px;
+    }
+
+    #auditBtn {
+      background: var(--iris-blue);
+      color: white;
+      border-color: var(--iris-blue);
+    }
+
+    #auditBtn:hover:not(:disabled) {
+      background: var(--iris-blue-dark);
+    }
+
+    #auditBtn:disabled {
+      background: #bdc1c6;
+      border-color: #bdc1c6;
+      cursor: not-allowed;
+    }
+
+    #restoreBtn,
+    #clearBtn {
+      background: white;
+      color: var(--text-gray);
+    }
+
+    #restoreBtn {
+      color: var(--iris-blue);
+    }
+
+    #restoreBtn:hover,
+    #clearBtn:hover {
+      background: #f1f3f4;
+    }
+
+    /* Status message */
+
+    #statusMessage {
+      padding: 9px 10px;
+      margin: 2px 0 12px;
+      border-radius: 6px;
+      background: #eef3fd;
+      color: #3c4043;
+      font-size: 11px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    /* Findings panel */
+
+    .results-heading {
+      margin: 15px 0 9px;
+      font-size: 13px;
+      font-weight: 650;
+      color: #202124;
+    }
+
+    #results {
+      max-height: 360px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      background: white;
+      border: 1px solid #e8eaed;
+      border-radius: 8px;
+    }
+
+    #results:empty {
+      display: none;
+    }
+
+    .report-item {
+      padding: 13px;
+      border-bottom: 1px solid #e8eaed;
+      cursor: pointer;
+      overflow-wrap: anywhere;
+    }
+
+    .report-item:last-child {
+      border-bottom: none;
+    }
+
+    .report-item:hover {
+      background: #f8fbff;
+    }
+
+    .report-item a {
+      overflow-wrap: anywhere;
+    }
+
+    /* Scrollbar */
+
+    #results::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    #results::-webkit-scrollbar-thumb {
+      background: #c1c7cd;
+      border-radius: 6px;
+    }
+
+    #results::-webkit-scrollbar-track {
+      background: #f8f9fa;
+    }
+
+    /* Footer */
+
+    .footer {
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 1px solid #e8eaed;
+      text-align: center;
+      color: var(--text-gray);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .footer strong {
+      color: var(--iris-blue);
+      font-weight: 650;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="mainPage">
+
+    <header class="header">
+      <div class="header-title-container">
+
+        <svg
+          class="logo"
+          viewBox="0 0 100 100"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+        >
+          <circle
+            cx="42"
+            cy="42"
+            r="28"
+            stroke="#FFFFFF"
+            stroke-width="8"
+          />
+
+          <path
+            d="M63 63 L84 84"
+            stroke="#FFFFFF"
+            stroke-width="10"
+            stroke-linecap="round"
+          />
+
+          <path
+            d="M42 28 V56"
+            stroke="#FFFFFF"
+            stroke-width="7"
+            stroke-linecap="round"
+          />
+
+          <path
+            d="M28 42 H56"
+            stroke="#FFFFFF"
+            stroke-width="7"
+            stroke-linecap="round"
+          />
+        </svg>
+
+        <h1>
+          IRIS<br>
+          <span style="font-size: 12px; font-weight: 500;">
+            Information &amp; Reasoning Inconsistency Scanner
+          </span>
+        </h1>
+
+      </div>
+
+      <div class="status">
+        AI-Assisted Media Literacy &amp; Fact-Checking
+      </div>
+    </header>
+
+    <main class="container">
+
+      <p class="intro">
+        Examine webpage content for weaknesses in reasoning,
+        misleading claims, and potential factual inaccuracies.
+      </p>
+
+      <button id="auditBtn">
+        Run AI Scanner
+      </button>
+
+      <button id="restoreBtn">
+        Restore Saved Analysis
+      </button>
+
+      <button id="clearBtn">
+        Hide Analysis
+      </button>
+
+      <div
+        id="statusMessage"
+        role="status"
+        aria-live="polite"
+      >
+        Connecting to the current webpage...
+      </div>
+
+      <div class="results-heading">
+        Analysis Report
+      </div>
+
+      <div id="results"></div>
+
+      <footer class="footer">
+        <strong>IRIS</strong> helps you question claims and examine evidence.
+        <br>
+        AI-generated findings may be incorrect. Verify important claims
+        using reliable sources.
+      </footer>
+
+    </main>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
