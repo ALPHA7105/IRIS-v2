@@ -531,7 +531,9 @@ async function sendMessage(event) {
       throw new Error(data.error || `Chat failed (${response.status}).`);
     }
 
-    pending.remove();
+    if (pending && pending.isConnected) {
+      pending.remove();
+    }
 
     const answer = data.answer || "I couldn't generate an answer.";
     addBubble(
@@ -558,13 +560,19 @@ async function sendMessage(event) {
       addText(chatMessages, "p", note, "small");
     }
   } catch (error) {
-    pending.remove();
+    if (pending && pending.isConnected) {
+      pending.remove();
+    }
+
+    console.error("IRIS chat request failed:", error);
+
     addBubble(
-      "assistant",
-      `${error.message || "The request failed."}\n\nYour message was not added to the conversation history. You can try sending it again.`
+        "assistant",
+        `${error.message || "The request failed."}\n\nYour message was not added to the conversation history. You can try sending it again.`
     );
 
     chatInput.value = message;
+
   } finally {
     sending = false;
     sendBtn.disabled = false;
